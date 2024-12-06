@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://7ufqmo0i5pc8"]
+
+[ext_resource type="PackedScene" uid="uid://by7mjefe2l7hd" path="res://player/player.tscn" id="1_t2kjk"]
+[ext_resource type="Texture2D" uid="uid://4jew0m5rcxgi" path="res://icon.svg" id="2_sa63p"]
+
+[node name="GAME" type="Node2D"]
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(-149, -60)
+texture = ExtResource("2_sa63p")
+
+[node name="Player" parent="." instance=ExtResource("1_t2kjk")]
+scale = Vector2(3, 3)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+metadata/_edit_lock_ = true
