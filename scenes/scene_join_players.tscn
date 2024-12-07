@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://7ufqmo0i5pc8"]
+
+[ext_resource type="Script" path="res://scenes/scene_join_players.gd" id="1_fn225"]
+
+[node name="SceneJoinPlayers" type="Node2D"]
+script = ExtResource("1_fn225")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="JoinP1Button" type="Button" parent="CanvasLayer"]
+offset_left = 164.0
+offset_top = 175.0
+offset_right = 245.0
+offset_bottom = 206.0
+text = "Jogador 1"
+
+[node name="JoinP2Button" type="Button" parent="CanvasLayer"]
+offset_left = 259.0
+offset_top = 176.0
+offset_right = 340.0
+offset_bottom = 207.0
+text = "Jogador 2"
+
+[node name="JoinP3Button" type="Button" parent="CanvasLayer"]
+offset_left = 350.0
+offset_top = 177.0
+offset_right = 431.0
+offset_bottom = 208.0
+text = "Jogador 3"
+
+[node name="JoinP4Button" type="Button" parent="CanvasLayer"]
+offset_left = 442.0
+offset_top = 178.0
+offset_right = 523.0
+offset_bottom = 209.0
+text = "Jogador 4"
+
+[node name="InfoJoinP1" type="Label" parent="CanvasLayer"]
+offset_left = 185.0
+offset_top = 213.0
+offset_right = 225.0
+offset_bottom = 236.0
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoJoinP2" type="Label" parent="CanvasLayer"]
+offset_left = 278.0
+offset_top = 214.0
+offset_right = 318.0
+offset_bottom = 237.0
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoJoinP3" type="Label" parent="CanvasLayer"]
+offset_left = 372.0
+offset_top = 217.0
+offset_right = 412.0
+offset_bottom = 240.0
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoJoinP4" type="Label" parent="CanvasLayer"]
+offset_left = 463.0
+offset_top = 218.0
+offset_right = 503.0
+offset_bottom = 241.0
+text = "Y"
+horizontal_alignment = 1
+vertical_alignment = 1

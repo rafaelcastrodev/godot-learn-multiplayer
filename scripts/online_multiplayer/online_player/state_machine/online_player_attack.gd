@@ -1,4 +1,4 @@
-class_name PlayerAttack;
+class_name OnlinePlayerAttack;
 extends PlayerState;
 
 

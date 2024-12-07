@@ -1,4 +1,4 @@
-class_name PlayerCrouch;
+class_name OnlinePlayerHurt;
 extends PlayerState;
 
 
@@ -9,8 +9,7 @@ func _ready() -> void:
 
 func enter() -> void:
 	super();
-	owner.character_speed = 30.0;
-	animator.play(owner.PlayerAnimations.CROUCH);
+	animator.play(owner.PlayerAnimations.HURT);
 #}
 
 
@@ -21,15 +20,7 @@ func exit() -> void:
 
 # Updates every _process() update (When state is_active)
 func update(delta: float) -> void:
-	return;
-	if owner.is_character_crouching:
-		return;
-
-	if owner.character_direction == Vector2.ZERO:
-		state_transitioned.emit(self, owner.PlayerAnimations.IDLE);
-		return;
-
-	state_transitioned.emit(self, owner.PlayerAnimations.WALK);
+	pass
 #}
 
 

@@ -1,15 +1,16 @@
-class_name StateMachine;
+class_name LocalLocalPlayerStateMachine;
 extends Node;
 
 signal states_ready;
 
-var current_state: State;
+var current_state: LocalPlayerState;
+var current_state_name: String;
 var states: Dictionary = {}
 
 
 func _ready() -> void:
 	for child in get_children():
-		if child is State:
+		if child is LocalPlayerState:
 			states[child.name.to_lower()] = child;
 			child.state_transitioned.connect(_on_state_transitioned);
 
@@ -45,8 +46,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func force_state_transition(new_state_name: String, close_current_state: bool = false) -> void:
-	var new_state : State = states.get(new_state_name.to_lower());
-
+	var new_state : LocalPlayerState = states.get(new_state_name.to_lower());
+	
 	if not new_state:
 		printerr(
 			"Cannot force state " + new_state_name + " transition. New state is empty or transition state name does
@@ -58,14 +59,16 @@ func force_state_transition(new_state_name: String, close_current_state: bool = 
 		current_state.exit();
 		new_state.is_active = false;
 		current_state.is_active = false;
+		current_state_name = '<null>';
 	else:
+		current_state_name = new_state_name.to_lower();
 		new_state.enter();
 		new_state.is_active = true;
 		current_state = new_state;
 #}
 
 
-func _on_state_transitioned(source_state : State, new_state_name : String) -> void:
+func _on_state_transitioned(source_state : LocalPlayerState, new_state_name : String) -> void:
 	# Source state has to be the current active state
 	if source_state != current_state:
 		printerr("Cannot change to " + new_state_name + " state state from source state");
@@ -76,7 +79,8 @@ func _on_state_transitioned(source_state : State, new_state_name : String) -> vo
 		return;
 
 	# Checking for the next state. If both are fine, the transition can be made.
-	var new_state: State = states.get(new_state_name.to_lower());
+	var new_state: LocalPlayerState = states.get(new_state_name.to_lower());
+	
 	if not new_state:
 		printerr("New state " + new_state_name + " is empty or transition state name does not match a state's name");
 
@@ -85,6 +89,7 @@ func _on_state_transitioned(source_state : State, new_state_name : String) -> vo
 		new_state.is_active = false;
 		current_state.is_active = false;
 
+	current_state_name = new_state_name.to_lower();
 	new_state.enter(); # Exit the new state
 	new_state.is_active = true;
 	current_state = new_state;

@@ -1,6 +1,5 @@
-class_name PlayerHurt;
-extends PlayerState;
-
+class_name LocalPlayerHurt;
+extends LocalPlayerState;
 
 func _ready() -> void:
 	super();
@@ -9,7 +8,7 @@ func _ready() -> void:
 
 func enter() -> void:
 	super();
-	animator.play(owner.PlayerAnimations.HURT);
+	animator.play(Globals.PlayerAnimations.HURT);
 #}
 
 

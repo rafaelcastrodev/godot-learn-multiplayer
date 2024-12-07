@@ -26,6 +26,7 @@ func _on_host_pressed() -> void:
 	_peer.create_server(_server_port);
 	multiplayer.multiplayer_peer = _peer;
 	multiplayer.peer_connected.connect(_on_peer_connected);
+	_add_player()
 	_hide_ui();
 #}
 

@@ -1,11 +1,15 @@
-class_name State;
+class_name LocalPlayerState;
 extends Node;
+
 """
 Base State class for the Finite State Machine
 """
-signal state_transitioned(source_state: State, new_state_name: String);
+signal state_transitioned(source_state: LocalPlayerState, new_state_name: String);
+signal state_animated(animation_name: String);
 
 var character: CharacterBody2D;
+var animator: AnimatedSprite2D;
+var collision: CollisionShape2D;
 var is_active: bool = false;
 
 func _ready() -> void:
@@ -19,8 +23,8 @@ func handle_input(event: InputEvent) -> void:
 
 
 func enter() -> void:
+	print("State: ", owner.player_state_machine.current_state_name);
 	set_physics_process(true);
-	#print("Enter State: ", self);
 #}
 
 

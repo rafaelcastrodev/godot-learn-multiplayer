@@ -1,4 +1,4 @@
-class_name PlayerRun;
+class_name OnlinePlayerIdle;
 extends PlayerState;
 
 
@@ -9,9 +9,8 @@ func _ready() -> void:
 
 func enter() -> void:
 	super();
-	owner.character_current_speed = owner.character_running_speed;
-	owner.sfx_walk.stop();
-	animator.play(owner.PlayerAnimations.RUN);
+	owner.velocity = Vector2.ZERO;
+	animator.play(owner.PlayerAnimations.IDLE);
 #}
 
 
@@ -23,15 +22,14 @@ func exit() -> void:
 # Updates every _process() update (When state is_active)
 func update(delta: float) -> void:
 
-	if not owner.sfx_run.playing:
-		owner.sfx_run.play();
-
 	if owner.character_direction == Vector2.ZERO:
-		state_transitioned.emit(self, owner.PlayerAnimations.IDLE);
 		return;
-	
+
 	if owner.is_character_walking:
 		state_transitioned.emit(self, owner.PlayerAnimations.WALK);
+		return;
+
+	state_transitioned.emit(self, owner.PlayerAnimations.RUN);
 #}
 
 

@@ -1,6 +1,5 @@
-class_name PlayerWalk;
-extends PlayerState;
-
+class_name LocalPlayerWalk;
+extends LocalPlayerState;
 
 func _ready() -> void:
 	super();
@@ -9,9 +8,9 @@ func _ready() -> void:
 
 func enter() -> void:
 	super();
-	owner.character_current_speed = owner.character_walk_speed;
+	owner.character_current_speed = Globals.PLAYER_WALKING_SPEED;
 	owner.sfx_run.stop();
-	animator.play(owner.PlayerAnimations.WALK);
+	animator.play(Globals.PlayerAnimations.WALK);
 #}
 
 
@@ -30,10 +29,10 @@ func update(delta: float) -> void:
 		return;
 
 	if owner.character_direction == Vector2.ZERO:
-		state_transitioned.emit(self, owner.PlayerAnimations.IDLE);
+		state_transitioned.emit(self, Globals.PlayerAnimations.IDLE);
 		return;
 
-	state_transitioned.emit(self, owner.PlayerAnimations.RUN);
+	state_transitioned.emit(self, Globals.PlayerAnimations.RUN);
 #}
 
 
