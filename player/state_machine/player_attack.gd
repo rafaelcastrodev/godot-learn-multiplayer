@@ -13,6 +13,9 @@ func finish_attack():
 
 func enter() -> void:
 	super();
+	owner.sfx_run.stop();
+	owner.sfx_walk.stop();
+	owner.sfx_attack.play();
 	owner.is_character_attacking = true;
 	animator.animation_finished.connect(finish_attack);
 	animator.play(owner.PlayerAnimations.ATTACK);

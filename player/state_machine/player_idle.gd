@@ -25,11 +25,11 @@ func update(delta: float) -> void:
 	if owner.character_direction == Vector2.ZERO:
 		return;
 
-	if owner.is_character_running:
-		state_transitioned.emit(self, owner.PlayerAnimations.RUN);
+	if owner.is_character_walking:
+		state_transitioned.emit(self, owner.PlayerAnimations.WALK);
 		return;
 
-	state_transitioned.emit(self, owner.PlayerAnimations.WALK);
+	state_transitioned.emit(self, owner.PlayerAnimations.RUN);
 #}
 
 

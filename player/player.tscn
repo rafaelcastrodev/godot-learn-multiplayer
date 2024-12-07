@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://by7mjefe2l7hd"]
+[gd_scene load_steps=44 format=3 uid="uid://by7mjefe2l7hd"]
 
 [ext_resource type="FontFile" uid="uid://b3wau748jika8" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_vchyc"]
 [ext_resource type="Texture2D" uid="uid://c43lp1lg2c6ss" path="res://assets/sprites/dinos.png" id="3_ah1yj"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://player/state_machine/player_walk.gd" id="8_w1c3y"]
 [ext_resource type="AudioStream" uid="uid://cfv6uqb72ghdf" path="res://assets/sfx/dirt_run.wav" id="10_6d8dn"]
 [ext_resource type="AudioStream" uid="uid://dcutcy4024dpe" path="res://assets/sfx/dirt_walk.wav" id="10_7e68j"]
+[ext_resource type="AudioStream" uid="uid://dwitw6kmwci8u" path="res://assets/sfx/rawr.wav" id="12_1blgv"]
 
 [sub_resource type="GDScript" id="GDScript_r2fqt"]
 script/source = "extends CharacterBody2D;
@@ -21,7 +22,7 @@ const PlayerActions: Dictionary = {
 	DOWN = \"move_down\",
 	RIGHT = \"move_right\",
 	JUMP = \"jump\",
-	RUN = \"run\",
+	WALK = \"walk\",
 	CROUCH = \"crouch\",
 	ATTACK = \"attack\",
 };
@@ -44,28 +45,42 @@ const PlayerAnimations: Dictionary = {
 var player_id: String = \"\";
 var gravity: int = ProjectSettings.get_setting(\"physics/2d/default_gravity\");
 var character_direction: Vector2;
-var is_character_running: bool = false;
+var is_character_walking: bool = false;
 var is_character_crouching: bool = false;
 var is_character_attacking: bool = false;
+var is_character_multiplayer_authority: bool;
 
+@onready var camera: Camera2D = $Camera2D;
 @onready var collision: CollisionShape2D = $CollisionShape2D;
 @onready var animator: AnimatedSprite2D = $AnimatedSprite2D;
 @onready var character: CharacterBody2D = $\".\";
 @onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var sfx_run: AudioStreamPlayer2D = $Sfx_Run;
 @onready var sfx_walk: AudioStreamPlayer2D = $Sfx_Walk;
+@onready var sfx_attack: AudioStreamPlayer2D = $Sfx_Attack;
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int())
+#}
 
 func _ready() -> void:
+	is_character_multiplayer_authority = is_multiplayer_authority();
+	camera.enabled = is_character_multiplayer_authority;
 	player_state_machine.states_ready.connect(_on_state_machine_states_ready);
 #}
 
-
 func _physics_process(delta: float) -> void:
+	if not is_character_multiplayer_authority:
+		return;
+		
 	character_direction = _get_character_direction_normalized();
 	_handle_movement(delta);
 #}
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_character_multiplayer_authority:
+		return;
+		
 	if event.is_action_pressed(PlayerActions.ATTACK):
 		player_state_machine.force_state_transition(PlayerAnimations.ATTACK);
 		return;
@@ -79,10 +94,12 @@ func _handle_movement(delta: float) -> void:
 		return;
 	
 	if character_direction == Vector2.ZERO:
-		is_character_running = false;
+		sfx_run.stop();
+		sfx_walk.stop();
+		is_character_walking = false;
 		return;
 		
-	is_character_running = Input.is_action_pressed(PlayerActions.RUN);
+	is_character_walking = Input.is_action_pressed(PlayerActions.WALK);
 
 	# MOVE character;
 	if character_direction:
@@ -93,7 +110,7 @@ func _handle_movement(delta: float) -> void:
 	# FLIP animator;
 	if character_direction.x > 0:
 		animator.flip_h = false;
-	else:
+	if character_direction.x < 0:
 		animator.flip_h = true;
 		
 	move_and_slide();
@@ -343,7 +360,13 @@ animations = [{
 radius = 6.0
 height = 16.0
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4g34u"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Player" type="CharacterBody2D"]
+scale = Vector2(3, 3)
 script = SubResource("GDScript_r2fqt")
 
 [node name="Label" type="Label" parent="."]
@@ -364,10 +387,8 @@ position = Vector2(-1, -9)
 sprite_frames = SubResource("SpriteFrames_n0sh2")
 animation = &"run"
 autoplay = "idle"
-frame_progress = 0.220536
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, -8)
 shape = SubResource("CapsuleShape2D_p00in")
 
@@ -394,8 +415,18 @@ script = ExtResource("8_w1c3y")
 
 [node name="Sfx_Run" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_6d8dn")
-volume_db = -15.0
+volume_db = -12.0
 
 [node name="Sfx_Walk" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_7e68j")
-volume_db = -15.0
+volume_db = -12.0
+
+[node name="Sfx_Attack" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_1blgv")
+volume_db = -5.0
+pitch_scale = 0.6
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_4g34u")
