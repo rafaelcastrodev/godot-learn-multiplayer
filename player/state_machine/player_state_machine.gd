@@ -61,10 +61,10 @@ func force_state_transition(new_state_name: String, close_current_state: bool = 
 		current_state.is_active = false;
 		current_state_name = '<null>';
 	else:
+		current_state_name = new_state_name.to_lower();
 		new_state.enter();
 		new_state.is_active = true;
 		current_state = new_state;
-		current_state_name = new_state_name.to_lower();
 #}
 
 

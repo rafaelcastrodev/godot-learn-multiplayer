@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func enter() -> void:
 	super();
-	owner.character_speed = 60.0;
+	owner.character_current_speed = owner.character_walk_speed;
 	animator.play(owner.PlayerAnimations.WALK);
 #}
 
@@ -21,6 +21,10 @@ func exit() -> void:
 
 # Updates every _process() update (When state is_active)
 func update(delta: float) -> void:
+
+	if not owner.sfx_walk.playing:
+		owner.sfx_run.stop();
+		owner.sfx_walk.play();
 
 	if owner.character_direction == Vector2.ZERO:
 		state_transitioned.emit(self, owner.PlayerAnimations.IDLE);
