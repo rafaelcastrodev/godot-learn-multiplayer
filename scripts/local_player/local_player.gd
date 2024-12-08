@@ -33,6 +33,9 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	
+	is_character_walking = event.is_action_pressed(Globals.PlayerActions.WALK);
+	#is_character_walking = MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.WALK)
+	
 	#if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.ATTACK):
 		#player_state_machine.force_state_transition(Globals.PlayerAnimations.ATTACK);
 		#return;
@@ -53,10 +56,7 @@ func _handle_movement(delta: float) -> void:
 		sfx_run.stop();
 		sfx_walk.stop();
 		is_character_walking = false;
-		return;
-		
-	is_character_walking = Input.is_action_pressed(Globals.PlayerActions.WALK);
-	#is_character_walking = MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.WALK)
+		return;	
 	
 	# MOVE character;
 	if character_direction:
@@ -98,5 +98,5 @@ func _get_character_direction_normalized():
 		#Globals.PlayerActions.LEFT, 
 		#Globals.PlayerActions.RIGHT, 
 		#Globals.PlayerActions.UP, 
-		#Globals.PlayerActions.DOWN);
-#}
+		#Globals.PlayerActions.DOWN).normalized();
+##}

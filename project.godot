@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="learn_multiplayer"
-run/main_scene="res://scenes/scene_join_players.tscn"
+run/main_scene="res://scenes/game.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://assets/icon.svg"
 
 [autoload]
 
 MultiplayerInput="*res://addons/multiplayer_input/multiplayer_input.gd"
-PlayerManager="*res://addons/multiplayer_input/player_manager.gd"
+PlayerManager="*res://scripts/player_manager.gd"
 Globals="*res://scripts/globals.gd"
 
 [editor_plugins]

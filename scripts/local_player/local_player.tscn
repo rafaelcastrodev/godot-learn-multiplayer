@@ -231,9 +231,8 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p00in"]
-radius = 6.0
-height = 16.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_d48j1"]
+radius = 5.66667
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(3, 3)
@@ -259,8 +258,8 @@ animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -8)
-shape = SubResource("CapsuleShape2D_p00in")
+position = Vector2(0, -5.66667)
+shape = SubResource("CircleShape2D_d48j1")
 
 [node name="PlayerStateMachine" type="Node" parent="."]
 script = ExtResource("4_ycehc")
@@ -285,11 +284,11 @@ script = ExtResource("10_d86j4")
 
 [node name="Sfx_Run" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("11_n1bjr")
-volume_db = -12.0
+volume_db = -10.0
 
 [node name="Sfx_Walk" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("12_4a1p7")
-volume_db = -12.0
+volume_db = -10.0
 
 [node name="Sfx_Attack" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_f2sjy")
