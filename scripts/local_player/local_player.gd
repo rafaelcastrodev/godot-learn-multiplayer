@@ -31,6 +31,7 @@ func init(id: int):
 func _ready() -> void:
 	player_state_machine.states_ready.connect(_on_state_machine_states_ready);
 	animator.animation_finished.connect(_on_animation_finished);
+	label.text = str("#",player_id);
 #}
 
 func _enter_tree() -> void:
@@ -38,16 +39,14 @@ func _enter_tree() -> void:
 #}
 
 func _physics_process(delta: float) -> void:
-
-	character_direction = _get_character_direction_normalized();
 	_handle_movement(delta);
 #}
 
 func _unhandled_input(event: InputEvent) -> void:
 	
-	is_character_walking = MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.WALK)
+	#is_character_walking = MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.WALK)
 	
-	if MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.SWAP_SKIN):
+	if MultiplayerInput.is_action_just_released(player_device, Globals.PlayerActions.SWAP_SKIN):
 		_change_character_skin();
 	
 	if not is_character_attacking and MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.ATTACK):
@@ -56,6 +55,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _handle_movement(delta: float) -> void:
+	character_direction = _get_character_direction_normalized();
 	
 	if is_character_attacking:
 		velocity = Vector2.ZERO;
