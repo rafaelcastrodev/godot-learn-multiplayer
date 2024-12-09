@@ -1,28 +1,42 @@
 class_name LocalPlayer;
 extends CharacterBody2D;
 
+signal leave;
+
+var input;
 var player_id: int = 0;
 var character_current_speed: float = 60.0;
 var character_direction: Vector2;
+var character_current_skin: int = 0;
 var is_character_walking: bool = false;
 var is_character_crouching: bool = false;
 var is_character_attacking: bool = false;
 
+var animator: AnimatedSprite2D;
 @onready var camera: Camera2D = $Camera2D;
 @onready var collision: CollisionShape2D = $CollisionShape2D;
-@onready var animator: AnimatedSprite2D = $AnimatedSprite2D;
+@onready var red_animator: AnimatedSprite2D = $RedAnimatedSprite2D;
+@onready var blue_animator: AnimatedSprite2D = $BlueAnimatedSprite2D;
+@onready var green_animator: AnimatedSprite2D = $GreenAnimatedSprite2D;
+@onready var yellow_animator: AnimatedSprite2D = $YellowAnimatedSprite2D;
 @onready var character: CharacterBody2D = $".";
 @onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var sfx_run: AudioStreamPlayer2D = $Sfx_Run;
 @onready var sfx_walk: AudioStreamPlayer2D = $Sfx_Walk;
 @onready var sfx_attack: AudioStreamPlayer2D = $Sfx_Attack;
+@onready var label: Label = $Label;
 
-func _enter_tree() -> void:
-	set_multiplayer_authority(name.to_int());
+
+func init(id: int):
+	player_id = id;
+	var device = PlayerManager.get_player_device(player_id);
+	input = DeviceInput.new(device);
+	
 #}
 
 func _ready() -> void:
 	player_state_machine.states_ready.connect(_on_state_machine_states_ready);
+	animator = red_animator;
 #}
 
 func _physics_process(delta: float) -> void:
@@ -31,16 +45,19 @@ func _physics_process(delta: float) -> void:
 	_handle_movement(delta);
 #}
 
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int());
+#}
+
 func _unhandled_input(event: InputEvent) -> void:
 	
-	is_character_walking = event.is_action_pressed(Globals.PlayerActions.WALK);
-	#is_character_walking = MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.WALK)
+	is_character_walking = MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.WALK)
 	
-	#if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.ATTACK):
-		#player_state_machine.force_state_transition(Globals.PlayerAnimations.ATTACK);
-		#return;
-				
-	if event.is_action_pressed(Globals.PlayerActions.ATTACK):
+	if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.SWAP_SKIN):
+		_change_character_skin();
+		return;
+	
+	if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.ATTACK):
 		player_state_machine.force_state_transition(Globals.PlayerAnimations.ATTACK);
 		return;
 #}
@@ -92,11 +109,30 @@ func _connect_children_state_signals() -> void:
 
 
 func _get_character_direction_normalized():
-	return Input.get_vector(Globals.PlayerActions.LEFT, Globals.PlayerActions.RIGHT, Globals.PlayerActions.UP, Globals.PlayerActions.DOWN).normalized();
-	#return MultiplayerInput.get_vector(
-		#player_id, 
-		#Globals.PlayerActions.LEFT, 
-		#Globals.PlayerActions.RIGHT, 
-		#Globals.PlayerActions.UP, 
-		#Globals.PlayerActions.DOWN).normalized();
-##}
+	
+	return input.get_vector(
+		Globals.PlayerActions.LEFT, 
+		Globals.PlayerActions.RIGHT, 
+		Globals.PlayerActions.UP, 
+		Globals.PlayerActions.DOWN).normalized();
+#}
+
+func _change_character_skin() -> void:
+	if character_current_skin == 3:
+		character_current_skin = 0;
+	else:
+		character_current_skin += 1;
+	print(character_current_skin)
+	animator.visible = false;
+	match character_current_skin:
+		0:
+			animator = red_animator;
+		1:
+			animator = blue_animator;
+		2:
+			animator = yellow_animator;
+		3:
+			animator = green_animator;
+			
+	animator.visible = true;
+#	}

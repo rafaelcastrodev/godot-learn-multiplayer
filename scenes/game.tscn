@@ -1,11 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cbdbc0lqf67eg"]
 
 [ext_resource type="PackedScene" uid="uid://c2evcansj1osg" path="res://scenes/sample_level.tscn" id="1_3vwhf"]
-[ext_resource type="PackedScene" uid="uid://bc58e56cvdshw" path="res://scripts/local_player/local_player.tscn" id="2_e4ore"]
+[ext_resource type="Script" path="res://scenes/game.gd" id="1_gayfc"]
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_gayfc")
 
 [node name="SampleLevel" parent="." instance=ExtResource("1_3vwhf")]
 scale = Vector2(2, 2)
-
-[node name="Player" parent="." instance=ExtResource("2_e4ore")]

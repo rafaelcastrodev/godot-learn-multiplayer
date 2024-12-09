@@ -11,6 +11,7 @@ const MAX_PLAYERS: int = 4;
 
 const PlayerActions: Dictionary = {
 	START = "start",
+	SWAP_SKIN = "swap_skin",
 	JOIN = "join",
 	UP = "move_up",
 	LEFT = "move_left",
