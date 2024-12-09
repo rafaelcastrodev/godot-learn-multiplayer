@@ -19,6 +19,7 @@ var animator: AnimatedSprite2D;
 @onready var blue_animator: AnimatedSprite2D = $BlueAnimatedSprite2D;
 @onready var green_animator: AnimatedSprite2D = $GreenAnimatedSprite2D;
 @onready var yellow_animator: AnimatedSprite2D = $YellowAnimatedSprite2D;
+@onready var pink_animator: AnimatedSprite2D = $PinkAnimatedSprite2D;
 @onready var character: CharacterBody2D = $".";
 @onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var sfx_run: AudioStreamPlayer2D = $Sfx_Run;
@@ -118,11 +119,11 @@ func _get_character_direction_normalized():
 #}
 
 func _change_character_skin() -> void:
-	if character_current_skin == 3:
+	if character_current_skin == 4:
 		character_current_skin = 0;
 	else:
 		character_current_skin += 1;
-	print(character_current_skin)
+
 	animator.visible = false;
 	match character_current_skin:
 		0:
@@ -133,6 +134,8 @@ func _change_character_skin() -> void:
 			animator = yellow_animator;
 		3:
 			animator = green_animator;
+		4:
+			animator = pink_animator;
 			
 	animator.visible = true;
 #	}
