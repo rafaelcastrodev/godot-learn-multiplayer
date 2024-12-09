@@ -12,14 +12,9 @@ var is_character_walking: bool = false;
 var is_character_crouching: bool = false;
 var is_character_attacking: bool = false;
 
-var animator: AnimatedSprite2D;
 @onready var camera: Camera2D = $Camera2D;
 @onready var collision: CollisionShape2D = $CollisionShape2D;
-@onready var red_animator: AnimatedSprite2D = $RedAnimatedSprite2D;
-@onready var blue_animator: AnimatedSprite2D = $BlueAnimatedSprite2D;
-@onready var green_animator: AnimatedSprite2D = $GreenAnimatedSprite2D;
-@onready var yellow_animator: AnimatedSprite2D = $YellowAnimatedSprite2D;
-@onready var pink_animator: AnimatedSprite2D = $PinkAnimatedSprite2D;
+@onready var animator: AnimatedSprite2D = $AnimatedSprite2D;
 @onready var character: CharacterBody2D = $".";
 @onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var sfx_run: AudioStreamPlayer2D = $Sfx_Run;
@@ -37,7 +32,6 @@ func init(id: int):
 
 func _ready() -> void:
 	player_state_machine.states_ready.connect(_on_state_machine_states_ready);
-	animator = red_animator;
 #}
 
 func _physics_process(delta: float) -> void:
@@ -124,18 +118,13 @@ func _change_character_skin() -> void:
 	else:
 		character_current_skin += 1;
 
-	animator.visible = false;
 	match character_current_skin:
-		0:
-			animator = red_animator;
-		1:
-			animator = blue_animator;
-		2:
-			animator = yellow_animator;
-		3:
-			animator = green_animator;
-		4:
-			animator = pink_animator;
-			
-	animator.visible = true;
-#	}
+		0: animator.set_sprite_frames(Globals.PlayerSkins.DINO_RED);
+		1: animator.set_sprite_frames(Globals.PlayerSkins.DINO_BLUE);
+		2: animator.set_sprite_frames(Globals.PlayerSkins.DINO_YELLOW);
+		3: animator.set_sprite_frames(Globals.PlayerSkins.DINO_GREEN);
+		4: animator.set_sprite_frames(Globals.PlayerSkins.DINO_PINK);
+	var current_animation = animator.animation;
+	animator.play(current_animation);
+	
+#}

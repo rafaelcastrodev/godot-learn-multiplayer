@@ -32,3 +32,11 @@ const PlayerAnimations: Dictionary = {
 	ATTACK = "attack",
 	HURT = "hurt",
 };
+
+const PlayerSkins: Dictionary = {
+	DINO_BLUE = preload("res://assets/sprites/dinos/dino_blue.tres"),
+	DINO_RED = preload("res://assets/sprites/dinos/dino_red.tres"),
+	DINO_YELLOW = preload("res://assets/sprites/dinos/dino_yellow.tres"),
+	DINO_GREEN = preload("res://assets/sprites/dinos/dino_green.tres"),
+	DINO_PINK = preload("res://assets/sprites/dinos/dino_pink.tres"),
+};

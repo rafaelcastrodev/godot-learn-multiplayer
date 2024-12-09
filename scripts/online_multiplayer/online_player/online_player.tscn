@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/online_multiplayer/online_player/online_player.gd" id="1_rowoy"]
 [ext_resource type="FontFile" uid="uid://b3wau748jika8" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_vchyc"]
-[ext_resource type="Texture2D" uid="uid://c43lp1lg2c6ss" path="res://assets/sprites/dinos.png" id="3_ah1yj"]
+[ext_resource type="Texture2D" uid="uid://c43lp1lg2c6ss" path="res://assets/sprites/dinos/dinos.png" id="3_ah1yj"]
 [ext_resource type="Script" path="res://scripts/online_multiplayer/online_player/state_machine/online_player_state_machine.gd" id="4_38qgk"]
 [ext_resource type="Script" path="res://scripts/online_multiplayer/online_player/state_machine/online_player_attack.gd" id="5_e1sf1"]
 [ext_resource type="Script" path="res://scripts/online_multiplayer/online_player/state_machine/online_player_hurt.gd" id="6_2ybgp"]
