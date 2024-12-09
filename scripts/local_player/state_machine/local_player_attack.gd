@@ -5,10 +5,12 @@ func _ready() -> void:
 	super();
 #}
 
-func finish_attack():
+func on_animation_finished() -> void:
+	super();
 	state_transitioned.emit(self, Globals.PlayerAnimations.IDLE);
 	owner.is_character_attacking = false;
 #}
+
 
 func enter() -> void:
 	super();
@@ -16,7 +18,6 @@ func enter() -> void:
 	owner.sfx_walk.stop();
 	owner.sfx_attack.play();
 	owner.is_character_attacking = true;
-	animator.animation_finished.connect(finish_attack);
 	animator.play(Globals.PlayerAnimations.ATTACK);
 #}
 

@@ -41,3 +41,7 @@ func update(delta: float) -> void:
 func physics_update(delta: float) -> void:
 	pass;
 #}
+
+func on_animation_finished() -> void:
+	pass;
+#}

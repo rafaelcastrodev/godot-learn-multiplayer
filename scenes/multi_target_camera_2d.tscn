@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmhtx7fffykru"]
+
+[ext_resource type="Script" path="res://camera_2d.gd" id="1_i8wmo"]
+
+[node name="MultiTargetCamera2D" type="Camera2D"]
+script = ExtResource("1_i8wmo")
+min_zoom = 1.0
+margin = Vector2(200, 200)

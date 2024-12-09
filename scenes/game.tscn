@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbdbc0lqf67eg"]
+[gd_scene load_steps=4 format=3 uid="uid://cbdbc0lqf67eg"]
 
 [ext_resource type="PackedScene" uid="uid://c2evcansj1osg" path="res://scenes/sample_level.tscn" id="1_3vwhf"]
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_gayfc"]
+[ext_resource type="PackedScene" uid="uid://cmhtx7fffykru" path="res://scenes/multi_target_camera_2d.tscn" id="3_7xje8"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_gayfc")
 
 [node name="SampleLevel" parent="." instance=ExtResource("1_3vwhf")]
 scale = Vector2(2, 2)
+
+[node name="MultiTargetCamera2D" parent="." instance=ExtResource("3_7xje8")]
+margin = Vector2(400, 200)

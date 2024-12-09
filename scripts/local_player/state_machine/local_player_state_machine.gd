@@ -70,6 +70,7 @@ func force_state_transition(new_state_name: String, close_current_state: bool = 
 
 func _on_state_transitioned(source_state : LocalPlayerState, new_state_name : String) -> void:
 	# Source state has to be the current active state
+
 	if source_state != current_state:
 		printerr("Cannot change to " + new_state_name + " state state from source state");
 		return;

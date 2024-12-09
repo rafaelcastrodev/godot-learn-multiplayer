@@ -4,6 +4,10 @@
 # Sync animacao
 # Sync sons entre jogadores
 
+# BUG
+# Controles controlando outros personagens
+# Attack state múltiplas vezes
+
 
 
 #Explicação do MultiplayerInput Addon para Godot

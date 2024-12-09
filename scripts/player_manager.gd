@@ -14,15 +14,15 @@ var player_data: Dictionary = {}
 
 
 func join(device: int):
-	var player = next_player()
-	if player >= 0:
+
+	var player_id = next_player();
+	if player_id >= 0:
 		# initialize default player data here
-		# "team" and "car" are remnants from my game just to provide an example
-		player_data[player] = {
+		player_data[player_id] = {
 			"device": device,
-			"team":0,
+			"player_id": player_id
 		}
-		player_joined.emit(player)
+		player_joined.emit(player_id);
 
 func leave(player: int):
 	if player_data.has(player):
@@ -41,6 +41,7 @@ func get_player_device(player: int) -> int:
 # get player data.
 # null means it doesn't exist.
 func get_player_data(player: int, key: StringName):
+
 	if player_data.has(player) and player_data[player].has(key):
 		return player_data[player][key]
 	return null
@@ -56,6 +57,7 @@ func set_player_data(player: int, key: StringName, value: Variant):
 # call this from a loop in the main menu or anywhere they can join
 # this is an example of how to look for an action on all devices
 func handle_join_input():
+
 	for device in get_unjoined_devices():
 		if MultiplayerInput.is_action_just_pressed(device, Globals.PlayerActions.JOIN):
 			join(device)
@@ -85,9 +87,9 @@ func next_player() -> int:
 
 # returns an array of all valid devices that are *not* associated with a joined player
 func get_unjoined_devices():
-	var devices = Input.get_connected_joypads()
-	# also consider keyboard player
-	devices.append(-1)
+	# considering -1 for keyboard player
+	var devices = [-1];
+	devices.append_array(Input.get_connected_joypads());
 	
 	# filter out devices that are joined:
 	return devices.filter(func(device): return !is_device_joined(device))

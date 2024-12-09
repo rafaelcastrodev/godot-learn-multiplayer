@@ -3,8 +3,8 @@ extends CharacterBody2D;
 
 signal leave;
 
-var input;
 var player_id: int = 0;
+var player_device: int = 0;
 var character_current_speed: float = 60.0;
 var character_direction: Vector2;
 var character_current_skin: int = 0;
@@ -12,11 +12,11 @@ var is_character_walking: bool = false;
 var is_character_crouching: bool = false;
 var is_character_attacking: bool = false;
 
-@onready var camera: Camera2D = $Camera2D;
+#@onready var camera: Camera2D = $Camera2D;
+@onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var collision: CollisionShape2D = $CollisionShape2D;
 @onready var animator: AnimatedSprite2D = $AnimatedSprite2D;
 @onready var character: CharacterBody2D = $".";
-@onready var player_state_machine: Node = $PlayerStateMachine;
 @onready var sfx_run: AudioStreamPlayer2D = $Sfx_Run;
 @onready var sfx_walk: AudioStreamPlayer2D = $Sfx_Walk;
 @onready var sfx_attack: AudioStreamPlayer2D = $Sfx_Attack;
@@ -25,13 +25,16 @@ var is_character_attacking: bool = false;
 
 func init(id: int):
 	player_id = id;
-	var device = PlayerManager.get_player_device(player_id);
-	input = DeviceInput.new(device);
-	
+	player_device = PlayerManager.get_player_device(player_id);
 #}
 
 func _ready() -> void:
 	player_state_machine.states_ready.connect(_on_state_machine_states_ready);
+	animator.animation_finished.connect(_on_animation_finished);
+#}
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int());
 #}
 
 func _physics_process(delta: float) -> void:
@@ -40,21 +43,15 @@ func _physics_process(delta: float) -> void:
 	_handle_movement(delta);
 #}
 
-func _enter_tree() -> void:
-	set_multiplayer_authority(name.to_int());
-#}
-
 func _unhandled_input(event: InputEvent) -> void:
 	
-	is_character_walking = MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.WALK)
+	is_character_walking = MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.WALK)
 	
-	if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.SWAP_SKIN):
+	if MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.SWAP_SKIN):
 		_change_character_skin();
-		return;
 	
-	if MultiplayerInput.is_action_pressed(player_id, Globals.PlayerActions.ATTACK):
-		player_state_machine.force_state_transition(Globals.PlayerAnimations.ATTACK);
-		return;
+	if not is_character_attacking and MultiplayerInput.is_action_pressed(player_device, Globals.PlayerActions.ATTACK):
+		player_state_machine.current_state.state_transitioned.emit(player_state_machine.current_state, Globals.PlayerAnimations.ATTACK);
 #}
 
 
@@ -86,12 +83,6 @@ func _handle_movement(delta: float) -> void:
 #}
 
 
-func _on_state_machine_states_ready() -> void:
-	_connect_children_state_signals();
-	player_state_machine.force_state_transition(Globals.PlayerAnimations.IDLE);
-#}
-
-
 func _connect_children_state_signals() -> void:
 
 	for key in player_state_machine.states:
@@ -102,10 +93,10 @@ func _connect_children_state_signals() -> void:
 			state.character = character;
 #}
 
-
 func _get_character_direction_normalized():
 	
-	return input.get_vector(
+	return MultiplayerInput.get_vector(
+		player_device,
 		Globals.PlayerActions.LEFT, 
 		Globals.PlayerActions.RIGHT, 
 		Globals.PlayerActions.UP, 
@@ -128,3 +119,12 @@ func _change_character_skin() -> void:
 	animator.play(current_animation);
 	
 #}
+
+func _on_state_machine_states_ready() -> void:
+	_connect_children_state_signals();
+	player_state_machine.force_state_transition(Globals.PlayerAnimations.IDLE);
+#}
+
+func _on_animation_finished():
+	player_state_machine.current_state.on_animation_finished();
+#	}
